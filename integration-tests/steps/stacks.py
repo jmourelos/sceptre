@@ -149,6 +149,25 @@ def step_impl(context, stack_name):
             raise e
 
 
+@when('the user creates stack "{stack_name}" with ignore protected stacks')
+def step_impl(context, stack_name):
+    sceptre_context = SceptreContext(
+        command_path=stack_name + '.yaml',
+        project_path=context.sceptre_dir,
+        ignore_protected_stacks=True
+    )
+
+    sceptre_plan = SceptrePlan(sceptre_context)
+    try:
+        sceptre_plan.create()
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'AlreadyExistsException' \
+                and e.response['Error']['Message'].endswith("already exists"):
+            return
+        else:
+            raise e
+
+
 @when('the user updates stack "{stack_name}"')
 def step_impl(context, stack_name):
     sceptre_context = SceptreContext(

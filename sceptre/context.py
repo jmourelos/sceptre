@@ -44,7 +44,7 @@ class SceptreContext(object):
 
     def __init__(self, project_path, command_path,
                  user_variables=None, options=None, output_format=None,
-                 no_colour=False, ignore_dependencies=False):
+                 no_colour=False, ignore_dependencies=False, ignore_protected_stacks=False):
         # project_path: absolute path to the base sceptre project folder
         # e.g. absolute_path/to/sceptre_directory
         self.project_path = normalise_path(project_path)
@@ -74,6 +74,7 @@ class SceptreContext(object):
         self.output_format = output_format if output_format else ""
         self.no_colour = no_colour if no_colour is True else False
         self.ignore_dependencies = ignore_dependencies if ignore_dependencies is True else False
+        self.ignore_protected_stacks = ignore_protected_stacks if ignore_protected_stacks is True else False
 
     def full_config_path(self):
         """

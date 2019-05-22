@@ -313,6 +313,21 @@ class TestCli(object):
         assert result.exit_code == 0
 
     @pytest.mark.parametrize(
+        "command, ignore_protected_stacks", [
+            ("create", True),
+            ("create", False),
+            ("delete", True),
+            ("delete", False),
+        ]
+    )
+    def test_ignore_protected_stacks_commands(self, command, ignore_protected_stacks):
+        args = [command, "dev/vpc.yaml", "cs-1", "-y"]
+        if ignore_protected_stacks:
+            args.insert(0, "--ignore-protected-stacks")
+        result = self.runner.invoke(cli, args)
+        assert result.exit_code == 0
+
+    @pytest.mark.parametrize(
         "command,yes_flag", [
             ("create", True),
             ("create", False),

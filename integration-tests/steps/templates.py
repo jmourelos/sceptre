@@ -66,6 +66,22 @@ def step_impl(context, stack_name):
         context.error = e
 
 
+@when('the user validates the template for stack "{stack_name}" with ignore protected stacks')
+def step_impl(context, stack_name):
+    sceptre_context = SceptreContext(
+        command_path=stack_name + '.yaml',
+        project_path=context.sceptre_dir,
+        ignore_protected_stacks=True
+    )
+
+    sceptre_plan = SceptrePlan(sceptre_context)
+    try:
+        response = sceptre_plan.validate()
+        context.response = response
+    except ClientError as e:
+        context.error = e
+
+
 @when('the user generates the template for stack "{stack_name}"')
 def step_impl(context, stack_name):
     sceptre_context = SceptreContext(

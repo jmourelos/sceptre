@@ -43,6 +43,12 @@ Feature: Create stack
     When the user creates stack "1/A" with ignore dependencies
     Then stack "1/A" exists in "CREATE_COMPLETE" state
 
+  Scenario: create new stack that ignores protected stacks
+    Given stack "1/A" does not exist
+    and the template for stack "1/A" is "valid_template.json"
+    When the user creates stack "1/A" with ignore protected stacks
+    Then stack "1/A" exists in "CREATE_COMPLETE" state
+
   Scenario: create new stack containing a SAM template transform
     Given stack "10/A" does not exist
     and the template for stack "10/A" is "sam_template.yaml"

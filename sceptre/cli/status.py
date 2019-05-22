@@ -28,7 +28,8 @@ def status_command(ctx, path):
         options=ctx.obj.get("options"),
         no_colour=ctx.obj.get("no_colour"),
         output_format=ctx.obj.get("output_format"),
-        ignore_dependencies=ctx.obj.get("ignore_dependencies")
+        ignore_dependencies=ctx.obj.get("ignore_dependencies"),
+        ignore_protected_stacks=ctx.obj.get("ignore_protected_stacks")
     )
 
     plan = SceptrePlan(context)

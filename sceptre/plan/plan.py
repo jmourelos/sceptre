@@ -15,6 +15,23 @@ from sceptre.plan.executor import SceptrePlanExecutor
 from sceptre.helpers import sceptreise_path
 
 
+def filter_out_protected_stacks(launch_order):
+    ignored_stacks = []
+    for batch in launch_order:
+        for stack in list(batch):
+            if stack.protected:
+                ignored_stacks.append(stack)
+                batch.remove(stack)
+    if not [stack for batch in launch_order for stack in batch]:
+        print("After ignoring protected stacks there are no remaining stacks selected")
+        exit(1)
+    if ignored_stacks:
+        print("The following stacks will be ignored since they are protected")
+        for stack in ignored_stacks:
+            print(stack)
+    return launch_order
+
+
 class SceptrePlan(object):
 
     def __init__(self, context):
@@ -63,6 +80,9 @@ class SceptrePlan(object):
                 "No stacks detected from the given path '{}'. Valid stack paths are: {}"
                 .format(sceptreise_path(self.context.command_path), self._valid_stack_paths())
             )
+
+        if self.context.ignore_protected_stacks:
+            launch_order = filter_out_protected_stacks(launch_order)
 
         return launch_order
 
